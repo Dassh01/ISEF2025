@@ -4,7 +4,7 @@ Servo servo;
 
 const int MAX = 180;
 const int MIN = 0;
-const int LED_PORT = 13;
+const int SERVO_PORT = 9;
 
 int tick = 100;
 char tickAsString[4];
@@ -12,7 +12,7 @@ bool goingDownFlag = false;
 
 void setup() {
   Serial.begin(9600);
-  servo.attach(9);
+  servo.attach(SERVO_PORT);
 }
 
 void loop() {
