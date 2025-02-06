@@ -1,3 +1,4 @@
+//TODO: CONSTANTS DOCUMENTATION
 const int frontMuscleSensorCommsPin = A0; 
 const int backMuscleSensorCommsPin = A1;
 
@@ -14,11 +15,24 @@ const int BACK_SERVO_INIT_POS = 0; //TODO: UPDATE
 const int MAX_MUSCLE_SENSOR_OUTPUT = 0; //TODO: UPDATE
 const int MIN_MUSCLE_SENSOR_OUTPUT = 0 //TODO: UPDATE
 
-int frontServoPosition = 0;
-int backServoPosition = 0;
+int internalFrontServoPosition = 0;
+int internalBackServoPosition = 0;
+
+int actualFrontServoPosition = 0;
+int actualBackServoPosition = 0;
 
 Servo frontServo;
 Servo backServo;
+
+//TODO: FUNCTION DOCUMENTATION
+
+int getActualFrontServoPosition() {
+  return frontServo.read();
+}
+
+int getActualBackServoPosition() {
+  return backServo.read();
+}
 
 int getFrontMuscleSensorValue() {
   return analogRead(frontMuscleSensorCommsPin);
@@ -28,11 +42,11 @@ int getBackMuscleSensorValue() {
   return analogRead(backMuscleSensorCommsPin);
 }
 
-int getFrontServoPositio() {
+int getInternalFrontServoPosition() {
   return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,MAX_SERVO_TICKS);
 }
 
-int getbackServoPosition() {
+int getInternalBackServoPosition() {
   return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,MAX_SERVO_TICKS);
 }
 
@@ -47,9 +61,27 @@ void setup() {
 }
 
 void loop() {
-  frontServoPosition = getFrontServoPosition();
-  backServoPosition = getbackServoPosition();
+  //Get positions to send servos to
+  internalFrontServoPosition = getInternalFrontServoPosition();
+  internalBackServoPosition = getInternalBackServoPosition();
 
-  frontServo.write(frontServoPosition);
-  backServo.write(backServoPosition);
+  //Print internal servo positions
+  Serial.print("Front servo position (internal): ");
+  Serial.println(internalFrontServoPosition);
+  Serial.print("Back servo position (internal): ");
+  Serial.println(internalBackServoPosition);
+
+  //Send positions to go to servos
+  frontServo.write(internalFrontServoPosition);
+  backServo.write(internalBackServoPosition);
+
+  //Get actual servo positions
+  actualFrontServoPosition = getActualFrontServoPosition();
+  actualBackServoPosition = getActualBackServoPosition();
+
+  //Print actual servo positions
+  Serial.print("Front servo position (actual): ");
+  Serial.println(actualFrontServoPosition);
+  Serial.print("Back servo position (actual): ");
+  Serial.println(actualBackServoPosition);
 }
