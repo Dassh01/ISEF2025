@@ -1,4 +1,15 @@
+#include <Servo.h>
+
 //TODO: CONSTANTS DOCUMENTATION
+/*
+PINS:
+FRONT MUSCLE SENSOR COMMS: A0
+BACK MUSCLE SENSOR COMMS: A1
+FRONT SERVO COMMS: 9
+BACK SERVO COMMS: 8
+*/
+
+//Declare constants
 const int frontMuscleSensorCommsPin = A0; 
 const int backMuscleSensorCommsPin = A1;
 
@@ -7,20 +18,22 @@ const int backServoCommsPin = 8;
 
 const int MAX_SERVO_TICKS = 180;
 const int MIN_SERVO_TICKS = 0;
+const int SERVO_MAXIMUM_MOVEMENT_LIMIT = 45;
 
-const int SERVO_MAXIMUM_MOVEMENT_LIMIT
 const int FRONT_SERVO_INIT_POS = 0; //TODO: UPDATE
 const int BACK_SERVO_INIT_POS = 0; //TODO: UPDATE
 
 const int MAX_MUSCLE_SENSOR_OUTPUT = 0; //TODO: UPDATE
-const int MIN_MUSCLE_SENSOR_OUTPUT = 0 //TODO: UPDATE
+const int MIN_MUSCLE_SENSOR_OUTPUT = 0; //TODO: UPDATE
 
+//Declare variables
 int internalFrontServoPosition = 0;
 int internalBackServoPosition = 0;
 
 int actualFrontServoPosition = 0;
 int actualBackServoPosition = 0;
 
+//Declare variables
 Servo frontServo;
 Servo backServo;
 
@@ -54,8 +67,8 @@ void setup() {
   frontServo.attach(frontServoCommsPin);
   backServo.attach(backServoCommsPin);
 
-  frontServo.write(FRONT_SERVO_INIT_POS)
-  backServo.write(BACK_SERVO_INIT_POS)
+  frontServo.write(FRONT_SERVO_INIT_POS);
+  backServo.write(BACK_SERVO_INIT_POS);
 
   Serial.begin(9600);
 }
