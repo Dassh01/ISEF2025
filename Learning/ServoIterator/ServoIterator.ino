@@ -4,18 +4,23 @@ Servo servo;
 
 const int MAX = 180;
 const int MIN = 0;
-const int SERVO_PORT = 9;
+const int SERVO_PORT = 8;
+const int analogInPin = A0;
 
 int tick = 100;
+int sensorValue;
 char tickAsString[4];
 bool goingDownFlag = false;
 
 void setup() {
+  
   Serial.begin(9600);
   servo.attach(SERVO_PORT);
 }
 
 void loop() {
+
+  sensorValue = analogRead(analogInPin);
 
   if (tick < MAX && !goingDownFlag) {
     tick++;
@@ -29,13 +34,11 @@ void loop() {
   }
 
 
-  itoa(tick,tickAsString,10);
-  servo.write(tick);
-
-  char output[12];
-  strcpy(output,"tick = ");
-  strcat(output,tickAsString);
-  Serial.println(output);
+  Serial.print("Tick: ");
+  Serial.print(tick);
+  Serial.print(",");
+  Serial.print("Muscle sensor: ");
+  Serial.println(sensorValue);
 
   delay(50);
 }

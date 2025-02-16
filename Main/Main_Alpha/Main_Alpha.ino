@@ -5,7 +5,7 @@
 PINS:
 FRONT MUSCLE SENSOR COMMS: A0
 BACK MUSCLE SENSOR COMMS: A1
-FRONT SERVO COMMS: 9
+FRONT SERVO COMMS: 7
 BACK SERVO COMMS: 8
 */
 
@@ -13,15 +13,18 @@ BACK SERVO COMMS: 8
 const int frontMuscleSensorCommsPin = A0; 
 const int backMuscleSensorCommsPin = A1;
 
-const int frontServoCommsPin = 9;
+const int frontServoCommsPin = 7;
 const int backServoCommsPin = 8;
 
-const int MAX_SERVO_TICKS = 180;
-const int MIN_SERVO_TICKS = 0;
-const int SERVO_MAXIMUM_MOVEMENT_LIMIT = 45;
+//In degrees
+const int SERVO_INIT_POS = 0; //TODO: UPDATE
 
-const int FRONT_SERVO_INIT_POS = 0; //TODO: UPDATE
-const int BACK_SERVO_INIT_POS = 0; //TODO: UPDATE
+const int MAX_SERVO_TICKS = 180;
+const int MIN_SERVO_TICKS = SERVO_INIT_POS;
+const int SERVO_MAXIMUM_MOVEMENT_LIMIT = 35;
+
+const int FRONT_SERVO_INIT_POS = SERVO_INIT_POS; //TODO: UPDATE
+const int BACK_SERVO_INIT_POS = SERVO_INIT_POS; //TODO: UPDATE
 
 const int MAX_MUSCLE_SENSOR_OUTPUT = 0; //TODO: UPDATE
 const int MIN_MUSCLE_SENSOR_OUTPUT = 0; //TODO: UPDATE
@@ -56,20 +59,21 @@ int getBackMuscleSensorValue() {
 }
 
 int getInternalFrontServoPosition() {
-  return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,MAX_SERVO_TICKS);
+  return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,SERVO_MAXIMUM_MOVEMENT_LIMIT);
 }
 
 int getInternalBackServoPosition() {
-  return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,MAX_SERVO_TICKS);
+  return map(getFrontMuscleSensorValue(),MIN_MUSCLE_SENSOR_OUTPUT,MAX_MUSCLE_SENSOR_OUTPUT,MIN_SERVO_TICKS,SERVO_MAXIMUM_MOVEMENT_LIMIT);
 }
 
 void setup() {
   frontServo.attach(frontServoCommsPin);
-  backServo.attach(backServoCommsPin);
+  frontServo.write(20);
+  //backServo.attach(backServoCommsPin);
 
-  frontServo.write(FRONT_SERVO_INIT_POS);
-  backServo.write(BACK_SERVO_INIT_POS);
-
+  //frontServo.write(FRONT_SERVO_INIT_POS);
+  //backServo.write(BACK_SERVO_INIT_POS);
+  
   Serial.begin(9600);
 }
 
@@ -97,4 +101,9 @@ void loop() {
   Serial.println(actualFrontServoPosition);
   Serial.print("Back servo position (actual): ");
   Serial.println(actualBackServoPosition);
+
+  //"Clear" screen
+  for (int i=0; i<100; i++) {
+   Serial.print("\n");
+  }
 }
